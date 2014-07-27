@@ -1,100 +1,108 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title></title>
   <meta charset="utf-8">
+  <title>ProjTracj -- an app for plotting the tracjectory of a projectile</title>
   <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="generator" content="slidify" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
-    media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
-
-  
-  <!-- Grab CDN jQuery, fall back to local if offline -->
-  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
-  <script data-main="libraries/frameworks/io2012/js/slides" 
-    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
-  </script>
-  
-  
+  <meta name="author" content="Luwei Zhou">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/theme/default.css" id="theme">
+  <link rel="stylesheet" href="libraries/highlighters/highlight/css/tomorrow.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  <link rel="stylesheet" href = "assets/css/ribbons.css">
 
 </head>
-<body style="opacity: 0">
-  <slides class="layout-widescreen">
-    
-    <!-- LOGO SLIDE -->
-        <slide class="title-slide segue nobackground">
-  <hgroup class="auto-fadein">
-    <h1></h1>
-    <h2></h2>
-    <p><br/></p>
-  </hgroup>
-  <article></article>  
-</slide>
-    
-
-    <!-- SLIDES -->
-    <slide class="" id="slide-1" style="background:;">
-  <hgroup>
-    <h2>Read-And-Delete</h2>
-  </hgroup>
-  <article data-timings="">
-    <ol>
-<li>Edit YAML front matter</li>
-<li>Write using R Markdown</li>
-<li>Use an empty line followed by three dashes to separate slides!</li>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h2>1. What is ProjTracj?</h2>
+  <ol>
+<li><p>ProjTracj stands for Projectile Trajectory.</p></li>
+<li><p>ProjTracj is an educational tool for middle school students to learn simple physics concept.</p></li>
 </ol>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+</section>
+<section class='class' data-state='' id='id'>
+  <h2>2. How is ProjTracj used?</h2>
+  <ol>
+<li><p>ProjTracj is an application that plots the trajectory of a projectile in a frictionless envirnoment.</p></li>
+<li><p>User can change the initial configuration of the projectile and a new trajectory is immediately updated.</p></li>
+</ol>
 
-<slide class="class" id="id" style="background:;">
-  <hgroup>
-    <h2>Slide 2</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
+</section>
+<section class='class' data-state='' id='id'>
+  <h2>3. How are the calculations done?</h2>
+  <pre><code class="r">    # Set up the initial condition
+    g   &lt;- 9.81              # gravity
+    x0  &lt;- 0                 # initial x position
+    y0  &lt;- 30                # initial y position
+    s0  &lt;- 30                # initial speed
+    a0  &lt;- 70                # initial angle
+    vx0 &lt;- s0*cos(a0/180*pi) # initial x velocity
+    vy0 &lt;- s0*sin(a0/180*pi) # initial y velocity
 
-    <slide class="backdrop"></slide>
-  </slides>
-  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
-    <ul>
-      <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Read-And-Delete'>
-         1
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Slide 2'>
-         2
-      </a>
-    </li>
-  </ul>
-  </div>  <!--[if IE]>
-    <script 
-      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
-    </script>
-    <script>CFInstall.check({mode: 'overlay'});</script>
-  <![endif]-->
+    # Calculate the time until the projectile hits ground
+    t_hit &lt;- (sqrt(vy0^2 + 2*g*y0) + vy0) / g
+
+    print(t_hit)
+</code></pre>
+
+<pre><code>## [1] 6.665
+</code></pre>
+
+</section>
+<section class='class' data-state='' id='id'>
+  <h2>4. How are the calculations done?</h2>
+  <pre><code class="r">    # Computes and plot the trajectory
+    T &lt;- seq(0, t_hit, length.out=300)
+    X &lt;- vx0 * T
+    Y &lt;- -0.5*g*T^2 + vy0*T + y0
+    plot(X, Y, type=&quot;l&quot;, xlab=&quot;distance (m)&quot;, ylab=&quot;height (m)&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-2.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+</section>
+<section class='class' data-state='' id='id'>
+  <h2>5. Questions? Suggestions?</h2>
+  <ol>
+<li><p>Application link: <a href="http://weslwz.shinyapps.io/projectile/">http://weslwz.shinyapps.io/projectile/</a></p></li>
+<li><p>GitHub link: <a href="https://github.com/weslwz/DevelopingDataProductsProject.git">https://github.com/weslwz/DevelopingDataProductsProject.git</a></p></li>
+<li><p>This presentation is done using slidify (<a href="http://ramnathv.github.io/slidify/">http://ramnathv.github.io/slidify/</a>)</p></li>
+</ol>
+
+</section>
+    </div>
+  </div>
 </body>
-  <!-- Load Javascripts for Widgets -->
-  
-  <!-- LOAD HIGHLIGHTER JS FILES -->
-  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
-   
-  </html>
+  <script src="libraries/frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="libraries/frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'default', 
+    transition: Reveal.getQueryHash().transition || 'default', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: 'libraries/frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: 'libraries/frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: 'libraries/frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: 'libraries/frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>   
+
+</html>
